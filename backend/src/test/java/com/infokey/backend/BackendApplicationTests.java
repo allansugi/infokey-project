@@ -1,10 +1,10 @@
-package com.infokey.infokey;
+package com.infokey.backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class InfokeyApplicationTests {
+class BackendApplicationTests {
 
 	@Test
 	void contextLoads() {
