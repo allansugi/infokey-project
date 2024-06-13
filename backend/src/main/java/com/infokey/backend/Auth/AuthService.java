@@ -5,5 +5,5 @@ import com.infokey.backend.User.UserAccountLogin;
 
 public interface AuthService {
     void registerAccount(UserAccount userAccount);
-    void loginAccount(UserAccountLogin userAccountLogin);
+    String loginAccount(UserAccountLogin userAccountLogin);
 }

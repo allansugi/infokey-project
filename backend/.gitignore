@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### PEM files ###
+!**/src/main/java/resources/*.pem

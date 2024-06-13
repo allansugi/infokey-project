@@ -1,9 +1,5 @@
 package com.infokey.backend.Auth;
 
-import com.infokey.backend.User.DuplicateUserException;
-import com.infokey.backend.User.UserAccount;
-import com.infokey.backend.User.UserAccountLogin;
-import com.infokey.backend.User.UserRepository;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,17 +8,25 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.infokey.backend.Token.TokenService;
+import com.infokey.backend.User.DuplicateUserException;
+import com.infokey.backend.User.UserAccount;
+import com.infokey.backend.User.UserAccountLogin;
+import com.infokey.backend.User.UserRepository;
+
 @Service
 public class ClientAuthService implements AuthService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
+    private final TokenService tokenService;
 
-    public ClientAuthService(PasswordEncoder passwordEncoder, UserRepository userRepository, AuthenticationManager authenticationManager) {
+    public ClientAuthService(PasswordEncoder passwordEncoder, UserRepository userRepository, AuthenticationManager authenticationManager, com.infokey.backend.Token.TokenService tokenService) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
+        this.tokenService = tokenService;
     }
 
     /**
@@ -47,11 +51,12 @@ public class ClientAuthService implements AuthService {
     }
 
     @Override
-    public void loginAccount(UserAccountLogin userAccountLogin) {
+    public String loginAccount(UserAccountLogin userAccountLogin) {
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     userAccountLogin.username(),
                     userAccountLogin.password()));
+            return tokenService.generateToken(authentication);
         } catch (AuthenticationException e) {
             System.out.println("Authentication error");
             throw new RuntimeException(e);
