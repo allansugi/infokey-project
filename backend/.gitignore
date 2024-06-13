@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ### PEM files ###
-!**/src/main/resources/*.pem
+*.pem
