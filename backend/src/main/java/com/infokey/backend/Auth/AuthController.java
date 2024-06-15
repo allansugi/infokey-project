@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.infokey.backend.User.UserAccount;
 import com.infokey.backend.User.UserAccountLogin;
+import com.infokey.backend.User.UserAccountRegister;
 
 
 @RestController
@@ -22,7 +22,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    private ResponseEntity<Void> register(@RequestBody UserAccount userAccount) {
+    private ResponseEntity<Void> register(@RequestBody UserAccountRegister userAccount) {
         authService.registerAccount(userAccount);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

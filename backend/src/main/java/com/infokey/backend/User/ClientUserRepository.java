@@ -1,11 +1,10 @@
 package com.infokey.backend.User;
 
-import org.springframework.jdbc.core.simple.JdbcClient;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
+import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class ClientUserRepository implements UserRepository{
@@ -29,16 +28,16 @@ public class ClientUserRepository implements UserRepository{
     @Override
     public Optional<UserAccount> findByUsername(String username) {
         return jdbcClient.sql("SELECT * FROM user_account WHERE username = :username")
-                .param("username", username)
-                .query(UserAccount.class)
-                .optional();
+                            .param("username", username)
+                            .query(UserAccount.class)
+                            .optional();
     }
 
     @Override
     public int create(UserAccount userAccount) {
             return jdbcClient.sql("INSERT INTO user_account (id, username, email, password) VALUES (?, ?, ?, ?)")
-                    .params(List.of(UUID.randomUUID().toString(), userAccount.username(), userAccount.email(), userAccount.password()))
-                    .update();
+                                .params(List.of(userAccount.id(), userAccount.username(), userAccount.email(), userAccount.password()))
+                                .update();
     }
 
     @Override
@@ -49,5 +48,13 @@ public class ClientUserRepository implements UserRepository{
     @Override
     public void delete(String id) {
 
+    }
+
+    @Override
+    public Optional<UserAccount> findByEmail(String email) {
+        return jdbcClient.sql("SELECT * FROM user_account WHERE email = :email")
+                        .param("email", email)
+                        .query(UserAccount.class)
+                        .optional();
     }
 }

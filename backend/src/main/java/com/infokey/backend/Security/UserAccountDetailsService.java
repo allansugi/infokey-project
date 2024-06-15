@@ -1,14 +1,15 @@
 package com.infokey.backend.Security;
 
-import com.infokey.backend.User.UserAccount;
-import com.infokey.backend.User.UserRepository;
+import java.util.Optional;
+
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import com.infokey.backend.User.UserAccount;
+import com.infokey.backend.User.UserRepository;
 
 @Service
 public class UserAccountDetailsService implements UserDetailsService {
@@ -18,10 +19,15 @@ public class UserAccountDetailsService implements UserDetailsService {
     public UserAccountDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
+    
+    /**
+     * uses email instead of username since email is unique
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<UserAccount> optionalUserAccount = userRepository.findByUsername(username);
+        Optional<UserAccount> optionalUserAccount = userRepository.findByEmail(username);
+        System.out.println(optionalUserAccount.isEmpty());
+        
         if (optionalUserAccount.isEmpty()) {
             throw new UsernameNotFoundException("username does not exist");
         }

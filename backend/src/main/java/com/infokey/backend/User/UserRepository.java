@@ -1,9 +1,9 @@
 package com.infokey.backend.User;
 
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository {
@@ -12,6 +12,8 @@ public interface UserRepository {
     Optional<UserAccount> findById(String id);
 
     Optional<UserAccount> findByUsername(String username);
+
+    Optional<UserAccount> findByEmail(String email);
 
     int create(UserAccount userAccount);
 

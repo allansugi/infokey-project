@@ -3,7 +3,6 @@ package com.infokey.backend.Token;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
@@ -17,13 +16,13 @@ public class TokenService {
         this.jwtEncoder = jwtEncoder;
     }
 
-    public String generateToken(Authentication authentication) {
+    public String generateToken(String userId) {
         Instant now = Instant.now();
         JwtClaimsSet claims = JwtClaimsSet.builder()
                                             .issuer("self")
                                             .issuedAt(now)
                                             .expiresAt(now.plus(1, ChronoUnit.HOURS))
-                                            .subject(authentication.getName())
+                                            .subject(userId)
                                             .claim("scope", "USER")
                                             .build();
         return this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();

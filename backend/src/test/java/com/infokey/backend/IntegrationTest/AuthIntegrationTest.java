@@ -1,4 +1,4 @@
-package com.infokey.backend;
+package com.infokey.backend.IntegrationTest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +12,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.infokey.backend.User.UserAccount;
 import com.infokey.backend.User.UserAccountLogin;
+import com.infokey.backend.User.UserAccountRegister;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -33,7 +33,7 @@ public class AuthIntegrationTest {
     @Test
     @DirtiesContext
     void RegisterUserSuccessfullyWithCorrectRequirementReturnOkResponse() throws Exception {
-        UserAccount newUserAccount = new UserAccount(null, "username", "username@gmail.com", "Password_1");
+        UserAccountRegister newUserAccount = new UserAccountRegister("username", "username@gmail.com", "Password_1");
         mockMvc.perform(post("/api/v1/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(newUserAccount)))
@@ -43,7 +43,7 @@ public class AuthIntegrationTest {
     @Test
     @DirtiesContext
     void RegisterUserDuplicateEmailWithCorrectRequirementReturnConflictResponse() throws Exception {
-        UserAccount newUserAccount = new UserAccount(null, "username", "username@gmail.com", "Password_1");
+        UserAccountRegister newUserAccount = new UserAccountRegister("username", "username@gmail.com", "Password_1");
         mockMvc.perform(post("/api/v1/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(newUserAccount)));
@@ -57,7 +57,7 @@ public class AuthIntegrationTest {
     @Test
     @DirtiesContext
     void RegisterUserWithIncorrectPasswordRequirementReturnBadRequest() throws Exception {
-        UserAccount newUserAccount = new UserAccount(null, "username", "username@gmail.com", "Pa");
+        UserAccountRegister newUserAccount = new UserAccountRegister("username", "username@gmail.com", "Pa");
         mockMvc.perform(post("/api/v1/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(newUserAccount)))
@@ -67,18 +67,44 @@ public class AuthIntegrationTest {
     @Test
     @DirtiesContext
     void LoginWithCorrectCredentialsReturnOk() throws Exception {
-        UserAccount newUserAccount = new UserAccount(null, "username", "username@gmail.com", "Password_1");
+        UserAccountRegister newUserAccount = new UserAccountRegister("username", "username@gmail.com", "Password_1");
         mockMvc.perform(post("/api/v1/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(newUserAccount)))
                 .andExpect(status().isCreated());
 
-        UserAccountLogin login = new UserAccountLogin("username", "Password_1");
+        UserAccountLogin login = new UserAccountLogin("username@gmail.com", "Password_1");
         
         mockMvc.perform(post("/api/v1/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(login)))
                 .andExpect(status().isOk())
                 .andReturn();
+    }
+
+    @Test
+    @DirtiesContext
+    void LoginWithIncorrectCredentialReturnsUnAuthorized() throws Exception {
+        UserAccountRegister newUserAccount = new UserAccountRegister("username", "username@gmail.com", "Password_1");
+        mockMvc.perform(post("/api/v1/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(newUserAccount)))
+                .andExpect(status().isCreated());
+
+        // uses wrong email
+        UserAccountLogin login1 = new UserAccountLogin("WrongUsername@gmail.com", "Password_1");
+        
+        mockMvc.perform(post("/api/v1/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(login1)))
+                .andExpect(status().isUnauthorized());
+
+        // uses wrong password
+        UserAccountLogin login2 = new UserAccountLogin("username@gmail.com", "Password_");
+        
+        mockMvc.perform(post("/api/v1/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(login2)))
+                .andExpect(status().isUnauthorized());
     }
 }

@@ -1,5 +1,7 @@
 package com.infokey.backend.Auth;
 
+import java.util.UUID;
+
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,6 +14,7 @@ import com.infokey.backend.Token.TokenService;
 import com.infokey.backend.User.DuplicateUserException;
 import com.infokey.backend.User.UserAccount;
 import com.infokey.backend.User.UserAccountLogin;
+import com.infokey.backend.User.UserAccountRegister;
 import com.infokey.backend.User.UserRepository;
 
 @Service
@@ -30,12 +33,12 @@ public class ClientAuthService implements AuthService {
     }
 
     /**
-     * check password requirement and duplicate email, if pass then encrypt it and store
+     * check password requirement and duplicate email, if pass then encrypt the password and store
      * the user info into the database
      * @param userAccount user info for register
      */
     @Override
-    public void registerAccount(UserAccount userAccount) {
+    public void registerAccount(UserAccountRegister userAccount) {
         // TODO: make password requirement
         // currently only do length check but more requirement will be added
         if (userAccount.password().length() < 8) {
@@ -43,22 +46,32 @@ public class ClientAuthService implements AuthService {
         }
 
         try {
-            UserAccount passwordEncodedUserAccount = userAccount.withEncodedPassword(passwordEncoder);
+            UserAccount passwordEncodedUserAccount = new UserAccount(
+                UUID.randomUUID().toString(), 
+                userAccount.username(), 
+                userAccount.email(), 
+                passwordEncoder.encode(userAccount.password())
+            );
             userRepository.create(passwordEncodedUserAccount);
         } catch (DuplicateKeyException e) {
             throw new DuplicateUserException();
         }
     }
 
+    /**
+     * authenticate user Info, if authenticated then return a bearer token
+     * containing user id
+     * @param userAccountLogin
+     * @return
+     */
     @Override
     public String loginAccount(UserAccountLogin userAccountLogin) {
         try {
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    userAccountLogin.username(),
-                    userAccountLogin.password()));
-            return tokenService.generateToken(authentication);
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userAccountLogin.username(),userAccountLogin.password());
+            Authentication authentication = authenticationManager.authenticate(authToken);
+            UserAccount account = userRepository.findByUsername(authentication.getName()).get();
+            return tokenService.generateToken(account.id());
         } catch (AuthenticationException e) {
-            System.out.println("Authentication error");
             throw new RuntimeException(e);
         }
     }
