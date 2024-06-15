@@ -1,23 +1,25 @@
 package com.infokey.backend.IntegrationTest;
 
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.infokey.backend.User.UserAccount;
-import com.infokey.backend.User.UserAccountLogin;
+import com.infokey.backend.User.dto.UserAccount;
+import com.infokey.backend.User.request.UserAccountLogin;
+import com.infokey.backend.Vault.request.NewVaultAccountItemRequest;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Disabled
 public class VaultAccountIntegrationTest {
     
     @Autowired
@@ -56,41 +58,41 @@ public class VaultAccountIntegrationTest {
         return result.getResponse().getContentAsString();
     }
 
-    // @Test
-    // void AccessVaultControllerWithoutBearerTokenReturnUnAuthorized() throws Exception {
-    //     VaultAccountItem item = new VaultAccountItem(null, "name", "username", "password");
-    //     mockMvc.perform(post("/api/v1/vaults")
-    //         .contentType(MediaType.APPLICATION_JSON)
-    //         .content(asJsonString(item)))
-    //         .andExpect(status().isUnauthorized());
-    // }
+    @Test
+    void AccessVaultControllerWithoutBearerTokenReturnUnAuthorized() throws Exception {
+        NewVaultAccountItemRequest item = new NewVaultAccountItemRequest("name", "username", "password");
+        mockMvc.perform(post("/api/v1/vaults")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(asJsonString(item)))
+            .andExpect(status().isUnauthorized());
+    }
 
-    // @Test
-    // void CreateNewVaultAccountItemWithValidBearerTokenReturnNoContent() throws Exception {
-    //     String token = getToken();
-    //     VaultAccountItem item = new VaultAccountItem(null, "name", "username", "password");
-    //     mockMvc.perform(post("/api/v1/vaults")
-    //             .contentType(MediaType.APPLICATION_JSON)
-    //             .content(asJsonString(item))
-    //             .header("Authorization", "Bearer " + token))
-    //             .andExpect(status().isNoContent());
-    // }
+    @Test
+    void CreateNewVaultAccountItemWithValidBearerTokenReturnNoContent() throws Exception {
+        String token = getToken();
+        NewVaultAccountItemRequest item = new NewVaultAccountItemRequest("name", "username", "password");
+        mockMvc.perform(post("/api/v1/vaults")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(item))
+                .header("Authorization", "Bearer " + token))
+                .andExpect(status().isNoContent());
+    }
 
-    // @Test
-    // @DirtiesContext
-    // void GetVaultAccountWithValidBearerTokenReturnOk() throws Exception {
-    //     String token = getToken();
+    @Test
+    @DirtiesContext
+    void GetVaultAccountWithValidBearerTokenReturnOk() throws Exception {
+        String token = getToken();
 
-    //     VaultAccountItem item = new VaultAccountItem(null, "name", "username", "password");
-    //     mockMvc.perform(post("/api/v1/vaults")
-    //             .contentType(MediaType.APPLICATION_JSON)
-    //             .content(asJsonString(item))
-    //             .header("Authorization", "Bearer " + token))
-    //             .andExpect(status().isNoContent());
+        NewVaultAccountItemRequest item = new NewVaultAccountItemRequest("name", "username", "password");
+        mockMvc.perform(post("/api/v1/vaults")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(item))
+                .header("Authorization", "Bearer " + token))
+                .andExpect(status().isNoContent());
 
         
-    //     mockMvc.perform(get("/api/v1/vaults")
-    //             .header("Authorization", "Bearer " + token))
-    //             .andExpect(status().isOk());
-    // }
+        mockMvc.perform(get("/api/v1/vaults")
+                .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk());
+    }
 }

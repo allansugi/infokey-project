@@ -12,8 +12,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.infokey.backend.User.UserAccountLogin;
-import com.infokey.backend.User.UserAccountRegister;
+import com.infokey.backend.User.request.UserAccountLogin;
+import com.infokey.backend.User.request.UserAccountRegister;
 
 @SpringBootTest
 @AutoConfigureMockMvc

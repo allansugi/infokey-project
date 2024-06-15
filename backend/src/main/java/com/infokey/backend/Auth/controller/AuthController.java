@@ -1,4 +1,4 @@
-package com.infokey.backend.Auth;
+package com.infokey.backend.Auth.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.infokey.backend.User.UserAccountLogin;
-import com.infokey.backend.User.UserAccountRegister;
+import com.infokey.backend.Auth.service.AuthService;
+import com.infokey.backend.User.request.UserAccountLogin;
+import com.infokey.backend.User.request.UserAccountRegister;
 
 
 @RestController

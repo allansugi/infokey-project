@@ -1,4 +1,4 @@
-package com.infokey.backend.Auth;
+package com.infokey.backend.Auth.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

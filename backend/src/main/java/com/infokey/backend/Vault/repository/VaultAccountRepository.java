@@ -1,10 +1,12 @@
-package com.infokey.backend.Vault;
+package com.infokey.backend.Vault.repository;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
+
+import com.infokey.backend.Vault.dto.VaultAccountItem;
 
 @Repository
 public class VaultAccountRepository implements VaultRepository {

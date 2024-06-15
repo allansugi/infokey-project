@@ -11,10 +11,10 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.infokey.backend.User.ClientUserRepository;
-import com.infokey.backend.User.UserAccount;
-import com.infokey.backend.Vault.VaultAccountItem;
-import com.infokey.backend.Vault.VaultAccountRepository;
+import com.infokey.backend.User.dto.UserAccount;
+import com.infokey.backend.User.repository.ClientUserRepository;
+import com.infokey.backend.Vault.dto.VaultAccountItem;
+import com.infokey.backend.Vault.repository.VaultAccountRepository;
 
 @SpringBootTest
 @AutoConfigureTestDatabase

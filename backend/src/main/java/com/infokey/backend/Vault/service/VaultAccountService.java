@@ -1,8 +1,11 @@
-package com.infokey.backend.Vault;
+package com.infokey.backend.Vault.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
+import com.infokey.backend.Vault.dto.VaultAccountItem;
+import com.infokey.backend.Vault.request.NewVaultAccountItemRequest;
 
 @Service
 public class VaultAccountService implements VaultService {

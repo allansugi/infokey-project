@@ -1,4 +1,4 @@
-package com.infokey.backend.Auth;
+package com.infokey.backend.Auth.service;
 
 import java.util.UUID;
 
@@ -10,12 +10,13 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.infokey.backend.Auth.exception.PasswordRequirementException;
 import com.infokey.backend.Token.TokenService;
-import com.infokey.backend.User.DuplicateUserException;
-import com.infokey.backend.User.UserAccount;
-import com.infokey.backend.User.UserAccountLogin;
-import com.infokey.backend.User.UserAccountRegister;
-import com.infokey.backend.User.UserRepository;
+import com.infokey.backend.User.dto.UserAccount;
+import com.infokey.backend.User.exception.DuplicateUserException;
+import com.infokey.backend.User.repository.UserRepository;
+import com.infokey.backend.User.request.UserAccountLogin;
+import com.infokey.backend.User.request.UserAccountRegister;
 
 @Service
 public class ClientAuthService implements AuthService {

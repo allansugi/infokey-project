@@ -1,10 +1,12 @@
-package com.infokey.backend.User;
+package com.infokey.backend.User.repository;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
+
+import com.infokey.backend.User.dto.UserAccount;
 
 @Repository
 public class ClientUserRepository implements UserRepository{
