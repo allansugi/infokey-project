@@ -22,10 +22,10 @@ import com.infokey.backend.Vault.repository.VaultAccountRepository;
 public class VaultAccountRepositoryTest {
 
     @Autowired
-    ClientUserRepository clientUserRepository;
+    private ClientUserRepository clientUserRepository;
 
     @Autowired
-    VaultAccountRepository vaultAccountRepository;
+    private VaultAccountRepository vaultAccountRepository;
 
     private String userId;
 

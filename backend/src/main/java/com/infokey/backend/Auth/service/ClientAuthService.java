@@ -47,12 +47,14 @@ public class ClientAuthService implements AuthService {
         }
 
         try {
+            String userId = UUID.randomUUID().toString();
             UserAccount passwordEncodedUserAccount = new UserAccount(
-                UUID.randomUUID().toString(), 
+                userId, 
                 userAccount.username(), 
                 userAccount.email(), 
                 passwordEncoder.encode(userAccount.password())
             );
+
             userRepository.create(passwordEncodedUserAccount);
         } catch (DuplicateKeyException e) {
             throw new DuplicateUserException();
