@@ -16,6 +16,12 @@ public class TokenService {
         this.jwtEncoder = jwtEncoder;
     }
 
+    /**
+     * create a jwt token with expiration of 1 hour
+     * setting the subject claim of userId
+     * @param userId user id
+     * @return jwt token
+     */
     public String generateToken(String userId) {
         Instant now = Instant.now();
         JwtClaimsSet claims = JwtClaimsSet.builder()

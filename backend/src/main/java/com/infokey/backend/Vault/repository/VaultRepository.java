@@ -9,6 +9,7 @@ public interface VaultRepository {
     int create(VaultAccountItem item);
     List<VaultAccountItem> findByOwner(String owner);
     Optional<VaultAccountItem> findById(String id);
+    boolean existByIdAndOwner(String id, String owner);
     int update(VaultAccountItem item);
     void delete(String id);
 }

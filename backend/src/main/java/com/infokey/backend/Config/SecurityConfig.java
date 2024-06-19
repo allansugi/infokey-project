@@ -1,5 +1,6 @@
 package com.infokey.backend.Config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,16 +27,23 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
-    private final RSAKeyProperties rsaKeyProperties;
 
-    public SecurityConfig(UserDetailsService userDetailsService, RSAKeyProperties rsaKeyProperties) {
+    @Value("${rsa.public-key}")
+    RSAPublicKey publicKey;
+
+    @Value("${rsa.private-key}")
+    RSAPrivateKey privateKey;
+
+    public SecurityConfig(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
-        this.rsaKeyProperties = rsaKeyProperties;
     }
 
     @Bean
@@ -65,12 +73,12 @@ public class SecurityConfig {
 
     @Bean
     JwtDecoder jwtDecoder() {
-        return NimbusJwtDecoder.withPublicKey(rsaKeyProperties.getPublicKey()).build();
+        return NimbusJwtDecoder.withPublicKey(publicKey).build();
     }
 
     @Bean
     JwtEncoder jwtEncoder() {
-        JWK jwk = new RSAKey.Builder(rsaKeyProperties.getPublicKey()).privateKey(rsaKeyProperties.getPrivateKey()).build();
+        JWK jwk = new RSAKey.Builder(publicKey).privateKey(privateKey).build();
         JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwks);
     }

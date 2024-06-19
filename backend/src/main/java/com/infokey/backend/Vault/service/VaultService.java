@@ -9,6 +9,6 @@ public interface VaultService {
     String saveVault(NewVaultAccountItemRequest item, String userId);
     void updateVault(VaultAccountItem item);
     List<VaultAccountItem> findAllVaultByOwner(String owner);
+    void deleteVaultItem(String id, String owner);
     VaultAccountItem findById(String id);
-    void deleteVaultItem(String id);
 }

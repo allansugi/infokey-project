@@ -73,4 +73,13 @@ public class VaultAccountRepository implements VaultRepository {
                             .optional();
     }
 
+    @Override
+    public boolean existByIdAndOwner(String id, String owner) {
+       return jdbcClient.sql("SELECT * FROM vault_account WHERE id = :id")
+                        .param("id", id)
+                        .query(VaultAccountItem.class)
+                        .optional()
+                        .isPresent();
+    }
+
 }

@@ -1,9 +1,9 @@
 package com.infokey.backend.Vault.controller;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
+import com.infokey.backend.Vault.request.UpdateVaultAccountItem;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -43,7 +43,7 @@ public class VaultController {
 
     @GetMapping
     public ResponseEntity<List<VaultAccountItem>> getVaultItems(Authentication authentication) {
-        List<VaultAccountItem> items = new ArrayList<>();
+        List<VaultAccountItem> items = vaultService.findAllVaultByOwner(authentication.getName());
         return ResponseEntity.ok(items);
     }
 
@@ -54,14 +54,25 @@ public class VaultController {
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateItem(@PathVariable String id, @RequestBody VaultAccountItem item) {
-        //TODO: process PUT request
+    public ResponseEntity<Void> updateItem(
+            @PathVariable String id,
+            @RequestBody UpdateVaultAccountItem item,
+            Authentication authentication
+    ) {
+        VaultAccountItem updateItem = new VaultAccountItem(
+                id,
+                item.name(),
+                authentication.getName(),
+                item.username(),
+                item.password()
+        );
+        vaultService.updateVault(updateItem);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> DeleteItem(@PathVariable String id) {
-        //TODO: process DELETE request
+    public ResponseEntity<Void> DeleteItem(@PathVariable String id, Authentication authentication) {
+        vaultService.deleteVaultItem(id, authentication.getName());
         return ResponseEntity.noContent().build();
     }
 }

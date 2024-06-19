@@ -13,41 +13,44 @@ import com.infokey.backend.Vault.request.NewVaultAccountItemRequest;
 @Service
 public class VaultAccountService implements VaultService {
 
-    VaultAccountRepository VaultAccountRepository;
+    VaultAccountRepository vaultAccountRepository;
 
     public VaultAccountService(VaultAccountRepository VaultAccountRepository) {
-        this.VaultAccountRepository = VaultAccountRepository;
+        this.vaultAccountRepository = VaultAccountRepository;
     }
 
     @Override
     public String saveVault(NewVaultAccountItemRequest item, String userId) {
         String accountId = UUID.randomUUID().toString();
         VaultAccountItem newItem = new VaultAccountItem(accountId, item.name(), userId, item.username(), item.password());
-        VaultAccountRepository.create(newItem);
+        vaultAccountRepository.create(newItem);
         return accountId;
     }
 
     @Override
     public void updateVault(VaultAccountItem item) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateVault'");
+        if (!vaultAccountRepository.existByIdAndOwner(item.id(), item.owner())) {
+            throw new ItemNotFoundException();
+        }
+        vaultAccountRepository.update(item);
     }
 
     @Override
     public List<VaultAccountItem> findAllVaultByOwner(String owner) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAllVaultByOwner'");
+       return vaultAccountRepository.findByOwner(owner);
     }
 
     @Override
-    public void deleteVaultItem(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteVaultItem'");
+    public void deleteVaultItem(String id, String owner) {
+        if (!vaultAccountRepository.existByIdAndOwner(id, owner)) {
+            throw new ItemNotFoundException();
+        }
+        vaultAccountRepository.delete(id);
     }
 
     @Override
     public VaultAccountItem findById(String id) {
-        return VaultAccountRepository.findById(id).orElseThrow(() -> new ItemNotFoundException());
+        return vaultAccountRepository.findById(id).orElseThrow(() -> new ItemNotFoundException());
     }
 
 }
