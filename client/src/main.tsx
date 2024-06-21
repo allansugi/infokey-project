@@ -12,6 +12,8 @@ import Vault from './Page/Vault.tsx'
 import EditAccountModal from './components/EditAccountModal.tsx'
 import { accountLoader } from './loaders/accountLoaders.tsx'
 import NewAccountModal from './components/NewAccountModal.tsx'
+import Login from './Page/Login.tsx'
+import Register from './Page/Register.tsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,6 +21,8 @@ const router = createBrowserRouter(
       <Route path='home' element={<Home />}/>
       <Route path='docs' element={<Docs />}/>
       <Route path='about' element={<About />}/>
+      <Route path='login' element={<Login />}/>
+      <Route path='register' element={<Register />}/>
       <Route path='/user/:userId/vault' element={<Vault />} loader={accountLoader}>
         <Route path=':accountId' element={<EditAccountModal />}/>
         <Route path='create' element={<NewAccountModal />}/>

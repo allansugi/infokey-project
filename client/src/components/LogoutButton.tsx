@@ -1,11 +1,21 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "@chakra-ui/button";
+import { useContext } from "react";
+import { redirect, useNavigate } from "react-router-dom";
+import { CurrentUserContext, userGetterSetter } from "../App";
 
 const LogoutButton = () => {
-  const { logout } = useAuth0();
+  const navigate = useNavigate();
+  const { setUser, setIsAuthenticated } = useContext(CurrentUserContext) as userGetterSetter;
+
+  const handleClick = () => {
+    setUser('');
+    setIsAuthenticated(false);
+    navigate("/home");
+  }
 
   return (
-    <Button color='teal' variant='ghost' onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}>
+    <Button color='teal' variant='ghost' onClick={handleClick}>
       Log Out
     </Button>
   );

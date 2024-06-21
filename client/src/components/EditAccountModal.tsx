@@ -27,8 +27,8 @@ const EditAccountModal = () => {
             {/* TODO: add input for account */}
             <ModalBody>
                 <Stack spacing="12px">
-                    <Input placeholder="Account name"/>
-                    <Input placeholder="Username"/>
+                    <Input placeholder="Enter Name"/>
+                    <Input placeholder="Enter Username"/>
                     <InputGroup size='md'>
                         <Input
                             pr='4.5rem'
