@@ -1,12 +1,13 @@
 import { Alert, AlertDescription, AlertIcon, AlertTitle, Button, Container, Heading, Input, InputGroup, InputRightElement, Spacer, Stack } from "@chakra-ui/react"
-import PasswordInput from "../components/PasswordInput";
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CurrentUserContext, userGetterSetter } from "../App";
+import { HTTPStatus } from "../helpers/status";
 
 const Login = () => {
     const [failed, setFailed] = useState(false);
     const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
     const { setUser, setIsAuthenticated } = useContext(CurrentUserContext) as userGetterSetter;
 
@@ -18,12 +19,26 @@ const Login = () => {
         setShow(!show);
     }
 
-    const handleLogin = () => {
+    const handleLogin = async() => {
         // TODO: make login request
-        const success = true;
-        if (success) {
+        const response = await fetch('http://localhost:8080/api/v1/auth/login', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        })
+
+        const token: any = response.body;
+
+        if (response.status == HTTPStatus.OK) {
             setUser(username);
             setIsAuthenticated(true);
+            sessionStorage.setItem("token", token);
             navigate(`/user/${username}/vault`);
         } else {
             setFailed(true);
@@ -53,6 +68,7 @@ const Login = () => {
                             pr='4.5rem'
                             type={show ? 'text' : 'password'}
                             placeholder='Enter password'
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                         <InputRightElement width='4.5rem'>
                             <Button h='1.75rem' size='sm' onClick={handleShowPassword}>
