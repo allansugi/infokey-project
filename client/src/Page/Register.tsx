@@ -2,6 +2,7 @@ import { Button, Container, Heading, Input, InputGroup, InputRightElement, Space
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HTTPStatus } from "../helpers/status";
+import AuthService from "../service/AuthService";
 
 const Register = () => {
 
@@ -20,18 +21,7 @@ const Register = () => {
     const handleSubmit = async () => {
         if (username !== '' && email !== '' && password !== '') {
             try {
-                const response = await fetch('http://localhost:8080/api/v1/auth/register', {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        username: username,
-                        email: email,
-                        password: password
-                    })
-                })
+                const response = await AuthService.register(username, email, password);
     
                 if (response.status == HTTPStatus.CREATED) {
                     toast({

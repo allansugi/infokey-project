@@ -3,6 +3,8 @@ import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CurrentUserContext, userGetterSetter } from "../App";
 import { HTTPStatus } from "../helpers/status";
+import Register from "./Register";
+import AuthService from "../service/AuthService";
 
 const Login = () => {
     const [failed, setFailed] = useState(false);
@@ -21,17 +23,7 @@ const Login = () => {
 
     const handleLogin = async() => {
         // TODO: make login request
-        const response = await fetch('http://localhost:8080/api/v1/auth/login', {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                username: username,
-                password: password
-            })
-        })
+        const response = await AuthService.login(username, password);
 
         const token: any = response.body;
 
