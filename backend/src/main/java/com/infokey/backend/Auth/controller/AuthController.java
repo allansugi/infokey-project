@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.infokey.backend.Auth.LoginResponse;
 import com.infokey.backend.Auth.service.AuthService;
 import com.infokey.backend.User.request.UserAccountLogin;
 import com.infokey.backend.User.request.UserAccountRegister;
@@ -27,8 +28,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserAccountLogin userAccountLogin) {
-        String token = authService.loginAccount(userAccountLogin);
-        return ResponseEntity.ok(token);
+    public ResponseEntity<LoginResponse> login(@RequestBody UserAccountLogin userAccountLogin) {
+        LoginResponse response = authService.loginAccount(userAccountLogin);
+        return ResponseEntity.ok(response);
     }
 }

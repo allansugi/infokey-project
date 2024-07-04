@@ -11,6 +11,8 @@ const LogoutButton = () => {
   const handleClick = () => {
     setUser('');
     setIsAuthenticated(false);
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
     navigate("/home");
   }
 

@@ -1,27 +1,48 @@
-const accounts = [
-    {
-      "account_name": "Example Corp",
-      "username_email": "example@example.com"
-    },
-    {
-      "account_name": "Sample LLC",
-      "username_email": "sample_user"
-    },
-    {
-      "account_name": "Test Company",
-      "username_email": "test@test.com"
-    }
-]
+import { HTTPStatus } from "../helpers/status";
+import VaultService from "../service/VaultService";
 
 export interface AccountDetail {
-    account_name: String;
-    username_email: String;
+    id: string
+    name: string;
+    username: string;
+}
+
+export interface AccountItemDetail {
+    id: string
+    name: string;
+    username: string;
+    password: string;
 }
 
 export interface AccountDetails {
-    accounts: AccountDetail[];
+    items: AccountDetail[];
 }
 
-export function accountLoader() {
-    return { accounts };
+export interface editAccountParams {
+    accountId: string;
+}
+
+export async function accountLoader(): Promise<AccountDetails> {
+    const token = sessionStorage.getItem("token");
+    
+    if (token !== null) {
+        const response = await VaultService.getAccountItems(token);
+        if (response.status === HTTPStatus.OK) {
+            return await response.json();
+        }
+    }
+
+    return { items: [] };
+}
+
+export async function accountItemLoader({ params }: { params: any }): Promise<AccountItemDetail | null> {
+    const token = sessionStorage.getItem("token");
+    if (token !== null) {
+        const response = await VaultService.readAccountItem(token, params.accountId);
+        if (response.status === HTTPStatus.OK) {
+            return await response.json();
+        }
+    }
+
+    return null;
 }

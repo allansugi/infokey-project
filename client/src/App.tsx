@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction, createContext, useState } from 'react';
 import './App.css'
-import Navbar from './components/Navbar'
 import '@fontsource/roboto';
 import { Outlet } from 'react-router-dom';
 
@@ -25,7 +24,6 @@ function App() {
       isAuthenticated,
       setIsAuthenticated
     }}>
-      <Navbar />
       <Outlet />
     </CurrentUserContext.Provider>
   )

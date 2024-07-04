@@ -6,7 +6,7 @@ const LoginButton = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate("login");
+    navigate("/login");
   }
   return (
     // <Button colorScheme='teal' variant='ghost' onClick={() => loginWithRedirect()}>Log In</Button>

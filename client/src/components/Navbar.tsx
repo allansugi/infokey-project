@@ -3,12 +3,18 @@ import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
 import { Link } from "react-router-dom";
 import RegisterButton from "./RegisterButton";
-import { useContext } from "react";
-import { CurrentUserContext, userGetterSetter } from "../App";
+import { useState } from "react";
 
 const NavBar = () => {
 
-    const { user, isAuthenticated } = useContext(CurrentUserContext) as userGetterSetter;
+    // const { user, isAuthenticated } = useContext(CurrentUserContext) as userGetterSetter;
+    const [currentUser, setCurrentUser] = useState(() => {
+        return sessionStorage.getItem("user") || null;
+    });
+
+    const [authenticated, setIsAuthenticated] = useState(() => {
+        return sessionStorage.getItem("user") !== null;
+    })
 
     return (
         <Flex minWidth='max-content' alignItems='center' gap='2' p={3}>
@@ -18,7 +24,7 @@ const NavBar = () => {
             </Box>
 
             <Breadcrumb>
-                {!isAuthenticated && 
+                {!authenticated && 
                     <BreadcrumbItem>
                         <BreadcrumbLink as={Link} to={'/home'}>Home</BreadcrumbLink>
                     </BreadcrumbItem>
@@ -33,19 +39,19 @@ const NavBar = () => {
                 </BreadcrumbItem>
 
                 {
-                    isAuthenticated &&
+                    authenticated &&
                     
                     <BreadcrumbItem>
-                        <BreadcrumbLink as={Link} to="/user/1/vault">Vault</BreadcrumbLink>
+                        <BreadcrumbLink as={Link} to={`/user/${currentUser}/vault`}>Vault</BreadcrumbLink>
                     </BreadcrumbItem>
                 }
             </Breadcrumb>
 
             <Spacer />
-            {isAuthenticated && <Text>Welcome {user}</Text>}
+            {authenticated && <Text>Welcome {currentUser}</Text>}
             <ButtonGroup gap='2'>
-                {isAuthenticated ? <LogoutButton /> : <LoginButton />}
-                {!isAuthenticated && <RegisterButton />}
+                {authenticated ? <LogoutButton /> : <LoginButton />}
+                {!authenticated && <RegisterButton />}
             </ButtonGroup>
         </Flex>
     )

@@ -29,8 +29,8 @@ class VaultService {
         })
     }
 
-    async updateAccountItem(token: string, name: string, username: string, password: string) {
-        return await fetch("http://localhost:8080/api/v1/vaults", {
+    async updateAccountItem(token: string, id: string, name: string, username: string, password: string) {
+        return await fetch(`http://localhost:8080/api/v1/vaults/${id}`, {
             method: 'PUT',
             mode: 'cors',
             headers: {
@@ -67,3 +67,5 @@ class VaultService {
         })
     }
 }
+
+export default new VaultService();

@@ -9,6 +9,7 @@ import com.infokey.backend.Vault.dto.VaultAccountItem;
 import com.infokey.backend.Vault.exception.ItemNotFoundException;
 import com.infokey.backend.Vault.repository.VaultAccountRepository;
 import com.infokey.backend.Vault.request.NewVaultAccountItemRequest;
+import com.infokey.backend.Vault.response.VaultAccountView;
 
 @Service
 public class VaultAccountService implements VaultService {
@@ -29,6 +30,7 @@ public class VaultAccountService implements VaultService {
 
     @Override
     public void updateVault(VaultAccountItem item) {
+
         if (!vaultAccountRepository.existByIdAndOwner(item.id(), item.owner())) {
             throw new ItemNotFoundException();
         }
@@ -36,8 +38,12 @@ public class VaultAccountService implements VaultService {
     }
 
     @Override
-    public List<VaultAccountItem> findAllVaultByOwner(String owner) {
-       return vaultAccountRepository.findByOwner(owner);
+    public List<VaultAccountView> findAllVaultByOwner(String owner) {
+        List<VaultAccountItem> items = vaultAccountRepository.findByOwner(owner);
+        List <VaultAccountView> viewItems = items.stream()
+                                                    .map((VaultAccountItem item) -> new VaultAccountView(item.id(), item.name(), item.username()))
+                                                    .toList();
+        return viewItems;
     }
 
     @Override

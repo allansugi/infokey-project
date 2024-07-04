@@ -10,6 +10,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.infokey.backend.Auth.LoginResponse;
 import com.infokey.backend.Auth.exception.PasswordRequirementException;
 import com.infokey.backend.Token.TokenService;
 import com.infokey.backend.User.dto.UserAccount;
@@ -68,12 +69,13 @@ public class ClientAuthService implements AuthService {
      * @return
      */
     @Override
-    public String loginAccount(UserAccountLogin userAccountLogin) {
+    public LoginResponse loginAccount(UserAccountLogin userAccountLogin) {
         try {
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userAccountLogin.username(),userAccountLogin.password());
             Authentication authentication = authenticationManager.authenticate(authToken);
             UserAccount account = userRepository.findByUsername(authentication.getName()).get();
-            return tokenService.generateToken(account.id());
+            String token = tokenService.generateToken(account.id());
+            return new LoginResponse(token, account.id(), account.username());
         } catch (AuthenticationException e) {
             throw new RuntimeException(e);
         }

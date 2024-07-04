@@ -1,11 +1,16 @@
 import { Container, Heading } from "@chakra-ui/react"
+import Navbar from "../components/Navbar";
 
 const Home = () => {
     return (
-        <Container>
-            <Heading fontFamily="roboto">Welcome to Infokey, your password manager</Heading>
-            <Heading fontFamily="roboto">Login to get started</Heading>
-      </Container>
+        <>
+            <Navbar />
+            <Container>
+                <Heading fontFamily="roboto">Welcome to Infokey, your password manager</Heading>
+                <Heading fontFamily="roboto">Login to get started</Heading>
+            </Container>
+        </>
+        
     )
 }
 

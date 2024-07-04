@@ -1,10 +1,15 @@
 import { Container, Text } from "@chakra-ui/react"
+import Navbar from "../components/Navbar";
 
 const About = () => {
     return (
-        <Container>
-            <Text>This is About page</Text>
-      </Container>
+        <>
+            <Navbar />
+            <Container>
+                <Text>This is About page</Text>
+            </Container>
+        </>
+        
     )
 }
 

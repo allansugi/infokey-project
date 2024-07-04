@@ -1,11 +1,10 @@
-import { useDisclosure, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Input, Stack, InputGroup, InputRightElement } from "@chakra-ui/react"
+import { Container, Stack, Input, InputGroup, InputRightElement, Button, Heading, HStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate, useLoaderData } from "react-router-dom";
-import { AccountDetail, AccountItemDetail } from "../loaders/accountLoaders";
+import { AccountItemDetail } from "../loaders/accountLoaders";
 import VaultService from "../service/VaultService";
 
-const EditAccountModal = () => {
-    const {onClose} = useDisclosure();
+const EditAccountItem = () => {
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
 
@@ -16,7 +15,6 @@ const EditAccountModal = () => {
     const [password, setPassword] = useState(item.password);
 
     const handleClose = () => {
-        onClose();
         navigate(-1);
     }
 
@@ -29,22 +27,16 @@ const EditAccountModal = () => {
             const token = sessionStorage.getItem("token");
             if (token !== null) {
                 await VaultService.updateAccountItem(token, item.id, name, username, password);
-                handleClose();
+                navigate(-1);
             }
         }
     }
 
     return (
         <>
-        <Modal isOpen={true} onClose={onClose}>
-            <ModalOverlay />
-            <ModalContent>
-            <ModalHeader>Edit your account</ModalHeader>
-            <ModalCloseButton onClick={handleClose}/>
-
-            {/* TODO: add input for account */}
-            <ModalBody>
+            <Container>
                 <Stack spacing="12px">
+                    <Heading as='h2'>Edit Account</Heading>
                     <Input 
                         placeholder="Enter Name" 
                         defaultValue={name}
@@ -67,20 +59,19 @@ const EditAccountModal = () => {
                             </Button>
                         </InputRightElement>
                     </InputGroup>
+                    <HStack>
+                        <Button colorScheme='blue' mr={3} onClick={handleClose}>
+                            Close
+                        </Button>
+                        <Button variant='ghost' onClick={handleSubmit}>Submit</Button>
+                    </HStack>
                 </Stack>
-                
-            </ModalBody>
 
-            <ModalFooter>
-                <Button colorScheme='blue' mr={3} onClick={handleClose}>
-                Close
-                </Button>
-                <Button variant='ghost' onClick={handleSubmit}>Submit</Button>
-            </ModalFooter>
-            </ModalContent>
-        </Modal>
+                
+               
+            </Container>
         </>
     )
 }
 
-export default EditAccountModal;
+export default EditAccountItem;

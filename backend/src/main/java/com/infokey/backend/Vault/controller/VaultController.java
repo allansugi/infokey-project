@@ -4,8 +4,12 @@ import java.net.URI;
 import java.util.List;
 
 import com.infokey.backend.Vault.request.UpdateVaultAccountItem;
+import com.infokey.backend.Vault.response.ListVaultAccountResponse;
+import com.infokey.backend.Vault.response.VaultAccountView;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +26,7 @@ import com.infokey.backend.Vault.service.VaultAccountService;
 
 @RestController
 @RequestMapping("/api/v1/vaults")
+@CrossOrigin("*")
 public class VaultController {
 
     VaultAccountService vaultService;
@@ -42,9 +47,9 @@ public class VaultController {
     }
 
     @GetMapping
-    public ResponseEntity<List<VaultAccountItem>> getVaultItems(Authentication authentication) {
-        List<VaultAccountItem> items = vaultService.findAllVaultByOwner(authentication.getName());
-        return ResponseEntity.ok(items);
+    public ResponseEntity<ListVaultAccountResponse> getVaultItems(Authentication authentication) {
+        List<VaultAccountView> items = vaultService.findAllVaultByOwner(authentication.getName());
+        return ResponseEntity.ok(new ListVaultAccountResponse(items));
     }
 
     @GetMapping("/{id}")
