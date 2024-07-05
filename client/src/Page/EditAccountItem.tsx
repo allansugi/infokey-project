@@ -1,14 +1,16 @@
-import { Container, Stack, Input, InputGroup, InputRightElement, Button, Heading, HStack } from "@chakra-ui/react";
+import { Container, Stack, Input, InputGroup, InputRightElement, Button, Heading, HStack, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate, useLoaderData } from "react-router-dom";
 import { AccountItemDetail } from "../loaders/accountLoaders";
 import VaultService from "../service/VaultService";
+import { HTTPStatus } from "../helpers/httpstatus";
 
 const EditAccountItem = () => {
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
 
     const item = useLoaderData() as AccountItemDetail;
+    const toast = useToast();
 
     const [name, setName] = useState(item.name);
     const [username, setUsername] = useState(item.username);
@@ -25,10 +27,31 @@ const EditAccountItem = () => {
     const handleSubmit = async() => {
         if (name !== '' && username !== '' && password !== '') {
             const token = sessionStorage.getItem("token");
-            if (token !== null) {
-                await VaultService.updateAccountItem(token, item.id, name, username, password);
-                navigate(-1);
+            if (token === null) {
+                return;
             }
+           
+            const response = await VaultService.updateAccountItem(token, item.id, name, username, password);
+            
+            if (response.status === HTTPStatus.NO_CONTENT) {
+                toast({
+                    title: 'Account updated',
+                    description: "Account has been updated.",
+                    status: "success",
+                    duration: 3000,
+                    isClosable: true,
+                })
+                navigate(-1);
+            } else {
+                toast({
+                    title: 'Update Error',
+                    description: "There is a problem updating your account, try again later",
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                })
+            }
+            
         }
     }
 
@@ -66,9 +89,6 @@ const EditAccountItem = () => {
                         <Button variant='ghost' onClick={handleSubmit}>Submit</Button>
                     </HStack>
                 </Stack>
-
-                
-               
             </Container>
         </>
     )

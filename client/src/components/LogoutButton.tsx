@@ -1,7 +1,6 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "@chakra-ui/button";
 import { useContext } from "react";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { CurrentUserContext, userGetterSetter } from "../App";
 
 const LogoutButton = () => {
@@ -13,6 +12,7 @@ const LogoutButton = () => {
     setIsAuthenticated(false);
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("user");
+    sessionStorage.removeItem("id");
     navigate("/home");
   }
 

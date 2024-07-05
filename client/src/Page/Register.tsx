@@ -1,7 +1,7 @@
 import { Button, Container, Heading, Input, InputGroup, InputRightElement, Spacer, Stack, useToast } from "@chakra-ui/react"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { HTTPStatus } from "../helpers/status";
+import { HTTPStatus } from "../helpers/httpstatus";
 import AuthService from "../service/AuthService";
 import NavBar from "../components/Navbar";
 

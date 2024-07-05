@@ -1,4 +1,4 @@
-import { HTTPStatus } from "../helpers/status";
+import { HTTPStatus } from "../helpers/httpstatus";
 import VaultService from "../service/VaultService";
 
 export interface AccountDetail {

@@ -1,7 +1,7 @@
 import { Alert, AlertDescription, AlertIcon, AlertTitle, Button, Container, Heading, Input, InputGroup, InputRightElement, Spacer, Stack } from "@chakra-ui/react"
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { HTTPStatus } from "../helpers/status";
+import { HTTPStatus } from "../helpers/httpstatus";
 import AuthService from "../service/AuthService";
 import NavBar from "../components/Navbar";
 
@@ -28,7 +28,7 @@ const Login = () => {
             // setIsAuthenticated(true);
             sessionStorage.setItem("token", loginResponse.token);
             sessionStorage.setItem("user", loginResponse.username);
-            sessionStorage.setItem("id", loginResponse.id);
+            sessionStorage.setItem("id", loginResponse.userId);
             navigate(`/user/${loginResponse.userId}/vault`);
         } else {
             setFailed(true);

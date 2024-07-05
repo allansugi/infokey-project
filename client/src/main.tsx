@@ -11,7 +11,7 @@ import Vault from './Page/Vault.tsx'
 import { accountItemLoader, accountLoader } from './loaders/accountLoaders.tsx'
 import Login from './Page/Login.tsx'
 import Register from './Page/Register.tsx'
-import NewAccountComponent from './components/NewAccountComponent.tsx'
+import NewAccountComponent from './Page/NewAccountComponent.tsx'
 import EditAccountItem from './Page/EditAccountItem.tsx'
 
 const router = createBrowserRouter(

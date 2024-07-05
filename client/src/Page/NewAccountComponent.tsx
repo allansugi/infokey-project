@@ -1,11 +1,14 @@
-import { Button, Input, InputGroup, InputRightElement, Stack, HStack, Container, Heading } from "@chakra-ui/react"
+import { Button, Input, InputGroup, InputRightElement, Stack, HStack, Container, Heading, useToast } from "@chakra-ui/react"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import VaultService from "../service/VaultService";
+import { HTTPStatus } from "../helpers/httpstatus";
 
 const NewAccountComponent = () => {
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
+
+    const toast = useToast();
 
     const [name, setName] = useState('');
     const [username, setUsername] = useState('');
@@ -17,9 +20,30 @@ const NewAccountComponent = () => {
 
     const handleSubmit = async() => {
         const token = sessionStorage.getItem("token");
-        if (token !== null) {
-            await VaultService.createNewAccountItem(token, name, username, password);
+
+        if (token == null) {
+            return;
+        }
+
+        const response = await VaultService.createNewAccountItem(token, name, username, password);
+        
+        if (response.status === HTTPStatus.CREATED) {
+            toast({
+                title: 'Account Created',
+                description: "New account has been created.",
+                status: "success",
+                duration: 9000,
+                isClosable: true,
+            });
             navigate(-1);
+        } else {
+            toast({
+                title: 'Create Account Error',
+                description: "There is a problem creating new account, try again later",
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+            });
         }
     }
 
@@ -30,7 +54,7 @@ const NewAccountComponent = () => {
     return (
         <>
             <Container>
-                <Stack>
+                <Stack spacing="12px">
                     <Heading as='h2'>Add new account</Heading>
                     <Input placeholder="Account name" onChange={(e) => setName(e.target.value)}/>
                     <Input placeholder="Username" onChange={(e) => setUsername(e.target.value)}/>

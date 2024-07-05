@@ -7,10 +7,13 @@ import { useState } from "react";
 
 const NavBar = () => {
 
-    // const { user, isAuthenticated } = useContext(CurrentUserContext) as userGetterSetter;
     const [currentUser, setCurrentUser] = useState(() => {
         return sessionStorage.getItem("user") || null;
     });
+
+    const [id, setId] = useState(() => {
+        return sessionStorage.getItem("id") || null;
+    })
 
     const [authenticated, setIsAuthenticated] = useState(() => {
         return sessionStorage.getItem("user") !== null;
@@ -40,9 +43,8 @@ const NavBar = () => {
 
                 {
                     authenticated &&
-                    
                     <BreadcrumbItem>
-                        <BreadcrumbLink as={Link} to={`/user/${currentUser}/vault`}>Vault</BreadcrumbLink>
+                        <BreadcrumbLink as={Link} to={`/user/${id}/vault`}>Vault</BreadcrumbLink>
                     </BreadcrumbItem>
                 }
             </Breadcrumb>
