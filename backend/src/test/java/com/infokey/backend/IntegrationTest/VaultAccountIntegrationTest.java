@@ -1,6 +1,9 @@
 package com.infokey.backend.IntegrationTest;
 
 import com.infokey.backend.Vault.request.UpdateVaultAccountItem;
+import com.infokey.backend.Vault.response.ListVaultAccountResponse;
+import com.infokey.backend.Vault.response.VaultAccountView;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -10,7 +13,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -22,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.infokey.backend.Auth.LoginResponse;
 import com.infokey.backend.User.request.UserAccountLogin;
 import com.infokey.backend.User.request.UserAccountRegister;
 import com.infokey.backend.Vault.request.NewVaultAccountItemRequest;
@@ -36,8 +40,10 @@ public class VaultAccountIntegrationTest {
     @Autowired
     MockMvc mockMvc;
 
+    @Autowired
+    ObjectMapper mapper;
+
     private String asJsonString(Object object) {
-        ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
@@ -48,6 +54,7 @@ public class VaultAccountIntegrationTest {
     /**
      * @param token bearer token containing the user id
      * @param times number of account to be created
+     * @return location of each account item created
      * @throws Exception request error
      */
     private List<String> createMultipleVaultAccountItems(String token, int times) throws Exception {
@@ -83,11 +90,13 @@ public class VaultAccountIntegrationTest {
         
         MvcResult result = mockMvc.perform(post("/api/v1/auth/login")
                                     .contentType(MediaType.APPLICATION_JSON)
-                                            .content(asJsonString(login)))
+                                    .content(asJsonString(login)))
                                     .andExpect(status().isOk())
                                     .andReturn();
         
-        return result.getResponse().getContentAsString();
+        String serializedResponse = result.getResponse().getContentAsString();
+        LoginResponse response = mapper.readValue(serializedResponse, LoginResponse.class);
+        return response.token();
     }
 
     @Test
@@ -136,12 +145,17 @@ public class VaultAccountIntegrationTest {
     void GetVaultAccountWithValidBearerTokenReturnOk() throws Exception {
         String token = getToken();
         createMultipleVaultAccountItems(token, 3);
-        mockMvc.perform(get("/api/v1/vaults")
-                .header("Authorization", "Bearer " + token))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$", hasSize(3)));
+        MvcResult result = mockMvc.perform(get("/api/v1/vaults")
+                            .header("Authorization", "Bearer " + token))
+                            .andDo(print())
+                            .andExpect(status().isOk())
+                            .andReturn();
+        
+        String serializedResponse = result.getResponse().getContentAsString();
+        ListVaultAccountResponse response = mapper.readValue(serializedResponse, ListVaultAccountResponse.class);
+        List<VaultAccountView> items = response.items();
+
+        assertEquals(items.size(), 3);
     }
 
     @Test
@@ -196,11 +210,16 @@ public class VaultAccountIntegrationTest {
                 .andExpect(status().isNoContent());
 
         // check number of accounts
-        mockMvc.perform(get("/api/v1/vaults")
-                        .header("Authorization", "Bearer " + token))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$", hasSize(1)));
+        MvcResult result = mockMvc.perform(get("/api/v1/vaults")
+                                            .header("Authorization", "Bearer " + token))
+                                    .andExpect(status().isOk())
+                                    .andReturn();
+
+        String serializedResponse = result.getResponse().getContentAsString();
+        ListVaultAccountResponse response = mapper.readValue(serializedResponse, ListVaultAccountResponse.class);
+        List<VaultAccountView> items = response.items();
+
+        assertEquals(items.size(), 1);
     }
 
     @Test
