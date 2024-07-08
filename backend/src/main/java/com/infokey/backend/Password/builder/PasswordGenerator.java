@@ -31,6 +31,7 @@ public class PasswordGenerator {
         this.length = length;
         this.lower = lower;
         this.upper = upper;
+        this.number = number;
         this.special = special;
         this.random = random;
     }

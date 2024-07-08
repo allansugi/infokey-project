@@ -8,6 +8,7 @@ public class GeneratePasswordBuilder implements PasswordBuilder {
     private boolean lower;
     private boolean upper;
     private boolean number;
+
     private boolean special;
     private Random random;
 
@@ -37,8 +38,8 @@ public class GeneratePasswordBuilder implements PasswordBuilder {
     }
 
     @Override
-    public void setNumber(boolean number) {
-        this.number = number;
+    public void setNumber(boolean chooseNumber) {
+        this.number = chooseNumber;
     }
 
     public PasswordGenerator build() {
