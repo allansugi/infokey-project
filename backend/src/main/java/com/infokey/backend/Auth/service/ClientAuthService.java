@@ -12,6 +12,12 @@ import org.springframework.stereotype.Service;
 
 import com.infokey.backend.Auth.LoginResponse;
 import com.infokey.backend.Auth.exception.PasswordRequirementException;
+import com.infokey.backend.Auth.handler.PasswordLengthHandler;
+import com.infokey.backend.Auth.handler.PasswordLowercaseHandler;
+import com.infokey.backend.Auth.handler.PasswordNumericHandler;
+import com.infokey.backend.Auth.handler.PasswordSpecialCharacterHandler;
+import com.infokey.backend.Auth.handler.PasswordUppercaseHandler;
+import com.infokey.backend.Auth.handler.RegisterHandler;
 import com.infokey.backend.Token.TokenService;
 import com.infokey.backend.User.dto.UserAccount;
 import com.infokey.backend.User.exception.DuplicateUserException;
@@ -26,12 +32,23 @@ public class ClientAuthService implements AuthService {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
+    private final RegisterHandler handler;
 
     public ClientAuthService(PasswordEncoder passwordEncoder, UserRepository userRepository, AuthenticationManager authenticationManager, com.infokey.backend.Token.TokenService tokenService) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
+
+        RegisterHandler handler = RegisterHandler.link(
+            new PasswordLengthHandler(),
+            new PasswordLowercaseHandler(),
+            new PasswordUppercaseHandler(),
+            new PasswordNumericHandler(),
+            new PasswordSpecialCharacterHandler()
+        );
+
+        this.handler = handler;
     }
 
     /**
@@ -41,9 +58,7 @@ public class ClientAuthService implements AuthService {
      */
     @Override
     public void registerAccount(UserAccountRegister userAccount) {
-        // TODO: make password requirement
-        // currently only do length check but more requirement will be added
-        if (userAccount.password().length() < 8) {
+        if (!handler.check(userAccount)) {
             throw new PasswordRequirementException();
         }
 

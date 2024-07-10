@@ -56,8 +56,48 @@ public class AuthIntegrationTest {
 
     @Test
     @DirtiesContext
-    void RegisterUserWithIncorrectPasswordRequirementReturnBadRequest() throws Exception {
-        UserAccountRegister newUserAccount = new UserAccountRegister("username", "username@gmail.com", "Pa");
+    void RegisterUserWithIncorrectShortLengthReturnBadRequest() throws Exception {
+        UserAccountRegister newUserAccount = new UserAccountRegister("username", "username@gmail.com", "Pa1#");
+        mockMvc.perform(post("/api/v1/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(newUserAccount)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DirtiesContext
+    void RegisterUserWithIncorrectNoLowercaseReturnBadRequest() throws Exception {
+        UserAccountRegister newUserAccount = new UserAccountRegister("username", "username@gmail.com", "PASSWORD_123");
+        mockMvc.perform(post("/api/v1/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(newUserAccount)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DirtiesContext
+    void RegisterUserWithIncorrectNoUppercaseReturnBadRequest() throws Exception {
+        UserAccountRegister newUserAccount = new UserAccountRegister("username", "username@gmail.com", "password_123");
+        mockMvc.perform(post("/api/v1/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(newUserAccount)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DirtiesContext
+    void RegisterUserWithIncorrectNoNumericReturnBadRequest() throws Exception {
+        UserAccountRegister newUserAccount = new UserAccountRegister("username", "username@gmail.com", "password_ONE");
+        mockMvc.perform(post("/api/v1/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(newUserAccount)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DirtiesContext
+    void RegisterUserWithIncorrectNoSpecialCharacterReturnBadRequest() throws Exception {
+        UserAccountRegister newUserAccount = new UserAccountRegister("username", "username@gmail.com", "Password123");
         mockMvc.perform(post("/api/v1/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(newUserAccount)))
