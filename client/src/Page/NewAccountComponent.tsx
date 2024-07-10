@@ -53,9 +53,9 @@ const NewAccountComponent = () => {
 
     return (
         <>
-            <Container>
+            <Container width="100%" height="80%" display="flex" flexDirection="column" justifyContent="center">
                 <Stack spacing="12px">
-                    <Heading as='h2'>Add new account</Heading>
+                    <Heading as='h2' textAlign="center">Add new account</Heading>
                     <Input placeholder="Account name" onChange={(e) => setName(e.target.value)}/>
                     <Input placeholder="Username" onChange={(e) => setUsername(e.target.value)}/>
                     <InputGroup size='md'>

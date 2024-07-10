@@ -57,7 +57,7 @@ const EditAccountItem = () => {
 
     return (
         <>
-            <Container>
+            <Container width="100%" height="80%" display="flex" flexDirection="column" justifyContent="center">
                 <Stack spacing="12px">
                     <Heading as='h2'>Edit Account</Heading>
                     <Input 

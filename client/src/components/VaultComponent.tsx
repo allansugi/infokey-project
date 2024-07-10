@@ -30,7 +30,7 @@ const VaultComponent = () => {
         }
         const response = await VaultService.deleteAccountItem(token, accountId);
         if (response.status == HTTPStatus.NO_CONTENT) {
-            setItems(items.filter((item: AccountDetail) => item.id !== accountId));
+            setFilteredAccountItems(items.filter((item: AccountDetail) => item.id !== accountId));
             toast({
                 title: 'Account deleted.',
                 description: "Account has been deleted.",

@@ -9,14 +9,14 @@ const About = () => {
             <Navbar />
             <Container>
                 <Stack>
-                    <Heading>What is InfoKey</Heading>
+                    <Heading as="h2" size="lg">What is InfoKey</Heading>
                     <Text>
                         InfoKey is a password manager web application
                         where user can store account details and password
                         so you don't need to remember your account details
                         the next time you login. makes your login experience easier
                     </Text>
-                    <Heading>Motivation of InfoKey</Heading>
+                    <Heading as="h2" size="lg">Motivation of InfoKey</Heading>
                     <Text>
                         This web application is part of my personal project that i spend
                         in my free time. I am making this project to learn how to store and obtain
@@ -25,7 +25,7 @@ const About = () => {
                         (although feel free to play with this application) and instead use established
                         ones like bitwarden or keepassXC.
                     </Text>
-                    <Heading>Contact</Heading>
+                    <Heading as="h2" size="lg">Contact</Heading>
                     <Text>Email <EmailIcon /> : allansugi@gmail.com</Text>
                     <Text>GitHub: <Link href="https://github.com/allansugi">allansugi</Link></Text>
                     

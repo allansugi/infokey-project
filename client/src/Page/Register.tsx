@@ -1,4 +1,4 @@
-import { Button, Container, Heading, Input, InputGroup, InputRightElement, Spacer, Stack, useToast } from "@chakra-ui/react"
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Button, Container, Heading, Input, InputGroup, InputRightElement, Spacer, Stack, useToast, Text, UnorderedList, ListItem } from "@chakra-ui/react"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HTTPStatus } from "../helpers/httpstatus";
@@ -14,6 +14,7 @@ const Register = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [failed, setFailed] = useState(false);
 
     const handleShowPassword = () => {
         setShow(!show);
@@ -33,23 +34,35 @@ const Register = () => {
                         isClosable: true,
                     });
                     navigate('/home');
+                } else {
+                    setFailed(true);
                 }
                 
             } catch (error) {
-                console.log(error);
+                setFailed(true);
             }
         }
     }
     
     return (
-
         <>
             <NavBar />
             <Container>
                 <Stack>
-                    <Heading as='h2' textAlign="center">Register for new account</Heading>
+                    <Heading as='h2' textAlign="center">Register New account</Heading>
                     <Spacer />
+                    {failed && 
+                        <Alert status='error'>
+                            <AlertIcon />
+                            <AlertTitle>Login Failed</AlertTitle>
+                            <AlertDescription>Account does not meet the requirement</AlertDescription>
+                        </Alert>
+                    }
                     <Stack spacing="12px">
+                        <Alert status='info'>
+                            <AlertIcon />
+                            <AlertDescription>to find account requirement visit the docs page under Account Requirement section</AlertDescription>
+                        </Alert>
                         <Input placeholder='Enter Username' size='md' onChange={(e) => setUsername(e.target.value)}/>
                         <Input placeholder='Enter Email' size='md' onChange={(e) => setEmail(e.target.value)}/>
                         <InputGroup size='md'>

@@ -5,7 +5,7 @@ import { HTTPStatus } from "../helpers/httpstatus";
 
 const PasswordGeneratorComponent = () => {
 
-    const [password, setPassword] = useState("");
+    const [password, setPassword] = useState("Password Generated will be displayed here");
 
     const [length, setLength] = useState(8);
     const lower = true;
