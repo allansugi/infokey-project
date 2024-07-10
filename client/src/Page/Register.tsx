@@ -47,7 +47,7 @@ const Register = () => {
             <NavBar />
             <Container>
                 <Stack>
-                    <Heading as='h2'>Register for new account</Heading>
+                    <Heading as='h2' textAlign="center">Register for new account</Heading>
                     <Spacer />
                     <Stack spacing="12px">
                         <Input placeholder='Enter Username' size='md' onChange={(e) => setUsername(e.target.value)}/>
@@ -66,7 +66,7 @@ const Register = () => {
                             </InputRightElement>
                         </InputGroup>
                     </Stack>
-                <Button onClick={handleSubmit}>register</Button>
+                <Button onClick={handleSubmit}>Register</Button>
                 </Stack>
                 
             </Container>

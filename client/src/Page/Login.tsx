@@ -44,7 +44,7 @@ const Login = () => {
             <NavBar />
             <Container>
                 <Stack>
-                    <Heading as='h2'>User Login</Heading>
+                    <Heading as='h2' textAlign="center">User Login</Heading>
                     <Spacer />
                     {failed && 
                         <Alert status='error'>

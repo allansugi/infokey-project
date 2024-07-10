@@ -14,11 +14,6 @@ public class PasswordGenerator {
     private static final String UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final String SPECIAL = "!#$%&()*+,-./:;<=>?@[]^_`{|}~";
     private static final String NUMBER = "0123456789";
-    private static String ALL_STRING =  "";
-
-    public static void setALL_STRING(String aLL_STRING) {
-        ALL_STRING += aLL_STRING;
-    }
 
     public PasswordGenerator(
         int length, 
@@ -38,31 +33,31 @@ public class PasswordGenerator {
 
     public String generate() {
         StringBuilder password = new StringBuilder(length);
-
+        String allString = "";
         if (lower) {
-            setALL_STRING(LOWER);
+            allString += LOWER;
             password.append(LOWER.charAt(random.nextInt(LOWER.length())));
         }
 
         if (upper) {
-            setALL_STRING(UPPER);
+            allString += UPPER;
             password.append(UPPER.charAt(random.nextInt(UPPER.length())));
         }
 
         if (number) {
-            setALL_STRING(NUMBER);
+            allString += NUMBER;
             password.append(NUMBER.charAt(random.nextInt(NUMBER.length())));
         }
 
         if (special) {
-            setALL_STRING(SPECIAL);
+            allString += SPECIAL;
             password.append(SPECIAL.charAt(random.nextInt(SPECIAL.length())));
         }
 
         int count = password.length();
 
         for (int i = count; i <= length; i++) {
-            password.append(ALL_STRING.charAt(random.nextInt(ALL_STRING.length())));
+            password.append(allString.charAt(random.nextInt(allString.length())));
         }
 
         return shuffle(password.toString());

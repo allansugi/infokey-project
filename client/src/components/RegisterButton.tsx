@@ -6,7 +6,7 @@ const RegisterButton = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate("register");
+    navigate("/register");
   }
   return (
     // <Button colorScheme='teal' variant='ghost' onClick={() => loginWithRedirect()}>Log In</Button>

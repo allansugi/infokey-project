@@ -1,7 +1,7 @@
 import { HamburgerIcon } from "@chakra-ui/icons"
 import { Card, CardBody, Flex, Box, Spacer, Menu, MenuButton, IconButton, MenuList, MenuItem, Text, useToast } from "@chakra-ui/react"
 import { Outlet, Link as RouterLink, useNavigate } from "react-router-dom"
-import { AccountDetail, AccountDetails } from "../loaders/accountLoaders"
+import { AccountDetail } from "../loaders/accountLoaders"
 import { HTTPStatus } from "../helpers/httpstatus"
 import VaultService from "../service/VaultService"
 

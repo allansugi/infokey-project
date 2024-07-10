@@ -1,16 +1,47 @@
-import { Button, Card, CardBody, Checkbox, Container, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Stack, Text } from "@chakra-ui/react"
+import { Button, Card, CardBody, Checkbox, Container, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Stack, Text, useToast } from "@chakra-ui/react"
 import { useState } from "react";
+import PasswordService from "../service/PasswordService";
+import { HTTPStatus } from "../helpers/httpstatus";
 
 const PasswordGeneratorComponent = () => {
 
     const [password, setPassword] = useState("");
 
-    const handleGeneratePassword = () => {
-        setPassword("you pressed generate password");
+    const [length, setLength] = useState(8);
+    const lower = true;
+    const [upper, setUpper] = useState(false);
+    const [number, setNumber] = useState(false);
+    const [special, setSpecial] = useState(false);
+
+    const toast = useToast();
+
+    const handleGeneratePassword = async() => {
+        const response = await PasswordService.generatePassword(length, lower, upper, number, special);
+        if (response.status === HTTPStatus.OK) {
+            const responseBody = await response.json();
+            setPassword(responseBody.generatedPassword)
+        }
     }
 
     const handleCopyPassword = () => {
-        setPassword("You pressed Copy password");
+        navigator.clipboard.writeText(password).then(() => {
+            toast({
+                title: 'Password Copied',
+                description: "Password has been copied",
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
+            
+        }, () => {
+            toast({
+                title: 'Copy Failed',
+                description: "Failed to copy Password",
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            })
+        })
     }
 
     return (
@@ -25,7 +56,12 @@ const PasswordGeneratorComponent = () => {
             
             <Container>
                 <Text as="b">Length</Text>
-                <NumberInput defaultValue={8} min={8} max={20}>
+                <NumberInput 
+                    defaultValue={8} 
+                    min={8} 
+                    max={20} 
+                    onChange={(value) => setLength(parseInt(value))}
+                >
                     <NumberInputField />
                     <NumberInputStepper>
                         <NumberIncrementStepper />
@@ -40,13 +76,19 @@ const PasswordGeneratorComponent = () => {
                     <Checkbox defaultChecked isDisabled>
                         abc
                     </Checkbox>
-                    <Checkbox>
+                    <Checkbox 
+                        onChange={(e) => setUpper(e.target.checked)}
+                    >
                         ABC
                     </Checkbox>
-                    <Checkbox>
+                    <Checkbox 
+                        onChange={(e) => setNumber(e.target.checked)}
+                    >
                         0123
                     </Checkbox>
-                    <Checkbox>
+                    <Checkbox 
+                        onChange={(e) => setSpecial(e.target.checked)}
+                    >
                         !@#$%^
                     </Checkbox>
                 </Stack>
@@ -59,7 +101,6 @@ const PasswordGeneratorComponent = () => {
                 </Stack>
            </Container>
         </Stack>
-       
     )
 }
 
