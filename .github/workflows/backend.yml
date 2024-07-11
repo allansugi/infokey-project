@@ -19,6 +19,10 @@ jobs:
             distribution: 'temurin'
             java-version: '17'
             cache: maven
+        - name: make keygen.sh executable
+          run: cd backend && chmod u+x keygen.sh
+        - name: run script for generate public and private key
+          run: cd backend && ./keygen.sh
         - name: Build and Run Test
           run: cd backend && mvn --batch-mode package
             
