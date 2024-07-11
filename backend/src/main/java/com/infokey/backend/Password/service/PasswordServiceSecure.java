@@ -15,7 +15,7 @@ public class PasswordServiceSecure implements PasswordService {
 
     /**
      * configure password info from password requirement 
-     * into password builder
+     * into password builder and add secure random
      * @param builder
      * @param requirement
      */
