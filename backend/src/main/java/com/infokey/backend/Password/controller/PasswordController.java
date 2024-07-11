@@ -2,8 +2,6 @@ package com.infokey.backend.Password.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.infokey.backend.Password.builder.GeneratePasswordBuilder;
-import com.infokey.backend.Password.builder.PasswordGenerator;
 import com.infokey.backend.Password.request.PasswordRequirement;
 import com.infokey.backend.Password.response.GeneratePasswordResponse;
 import com.infokey.backend.Password.service.PasswordService;
