@@ -13,6 +13,12 @@ import com.infokey.backend.Password.response.GeneratePasswordResponse;
 @Service
 public class PasswordServiceSecure implements PasswordService {
 
+    /**
+     * configure password info from password requirement 
+     * into password builder
+     * @param builder
+     * @param requirement
+     */
     private void constructPassword(PasswordBuilder builder, PasswordRequirement requirement) {
         builder.setLength(requirement.length());
         builder.setLower(requirement.lowercase());
