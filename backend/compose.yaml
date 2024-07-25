@@ -1,4 +1,8 @@
 services:
+  spring-boot:
+    build: .
+    ports:
+      - 8080:8080
   mysql:
     image: 'mysql:latest'
     environment:
